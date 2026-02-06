@@ -4,11 +4,19 @@ import { useState } from 'react';
 
 export default function EIPICICore() {
   const [threadUrl, setThreadUrl] = useState('');
-  const [simActive, setSimActive] = useState(false);
+  const [simActive, setSimActive] = useState(true); // Default true for demo - shows dashboard immediately
   const [showReplyModal, setShowReplyModal] = useState(false);
   const [selectedCluster, setSelectedCluster] = useState<any>(null);
   const [showInviteModal, setShowInviteModal] = useState(false);
   const [selectedUnifier, setSelectedUnifier] = useState<string | null>(null);
+
+  // Translator states
+  const [writerHandle, setWriterHandle] = useState('');
+  const [recipientHandle, setRecipientHandle] = useState('');
+  const [messageText, setMessageText] = useState('');
+  const [translatedOutput, setTranslatedOutput] = useState('');
+  const [detectedFlavor, setDetectedFlavor] = useState('');
+  const [scanning, setScanning] = useState(false);
 
   const threadIntent = 'Building abundance in AI/space ecosystems — compounding hard with positive-sum peaks and ripple momentum.';
 
@@ -35,12 +43,21 @@ export default function EIPICICore() {
     return `Hey ${handle},\n\nQuietly admiring your abundance weaves — resonates deeply with this harmony peak (95%+ signal).\n\nStrong positive-sum ripple in SpaceX/xAI visions, exponential potential. Your voice would compound it seriously — genuine appreciation, no pressure if you'd like to jump in. ❤️🚀`;
   };
 
-  const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text).then(() => {
-      alert('Copied to clipboard!');
-    }).catch(() => {
-      alert('Copy failed — try on live eipici.com (HTTPS required)');
-    });
+  const generateTranslation = async () => {
+    if (!messageText.trim() || !recipientHandle.trim()) return;
+
+    setScanning(true);
+    setDetectedFlavor('Scanning public posts...');
+
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    const mockDetected = Object.keys(styles)[Math.floor(Math.random() * Object.keys(styles).length)];
+    setDetectedFlavor(mockDetected);
+
+    const base = messageText;
+    const styleText = styles[mockDetected as keyof typeof styles] || 'Positive-sum resonance compounding — genuine ripple forward ❤️🚀';
+    setTranslatedOutput(`${base}\n\nEIPICI Adapted in ${mockDetected} flavor (scanned from @${recipientHandle}'s posts):\n${base} — ${styleText} Genuine appreciation if it resonates.`);
+
+    setScanning(false);
   };
 
   const clusters = [
@@ -92,13 +109,6 @@ export default function EIPICICore() {
             Simulate Hub
           </button>
           <p className="text-2xl font-semibold text-cyan-300">Harmony and intent? Authenticity is truly exponentially epic.</p>
-        </div>
-
-        {/* Button to Translator */}
-        <div className="text-center mb-12">
-          <a href="/translator" className="px-8 py-4 bg-green-600 rounded-lg text-xl font-bold">
-            Open EIPICI Dynamic Translator
-          </a>
         </div>
 
         {simActive && (
@@ -174,7 +184,52 @@ export default function EIPICICore() {
         )}
       </div>
 
-      {/* Reply Modal */}
+      {/* Dynamic Translator below */}
+      <div className="max-w-5xl mx-auto mt-32 bg-blue-900/50 p-12 rounded-2xl">
+        <h2 className="text-3xl font-bold text-center mb-8">EIPICI Dynamic Translator</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+          <input
+            type="text"
+            placeholder="Your @handle (writer)"
+            value={writerHandle}
+            onChange={(e) => setWriterHandle(e.target.value)}
+            className="p-4 rounded-lg bg-blue-900/30 text-lg"
+          />
+          <input
+            type="text"
+            placeholder="Recipient @handle (scan for flavor)"
+            value={recipientHandle}
+            onChange={(e) => setRecipientHandle(e.target.value)}
+            className="p-4 rounded-lg bg-blue-900/30 text-lg"
+          />
+        </div>
+        <textarea
+          placeholder="Enter message/post text..."
+          value={messageText}
+          onChange={(e) => setMessageText(e.target.value)}
+          className="w-full h-64 bg-blue-900/30 p-6 rounded-lg text-lg mb-8"
+        />
+        <div className="text-center">
+          <button onClick={generateTranslation} disabled={scanning} className="px-8 py-4 bg-green-600 rounded-lg text-xl font-bold">
+            {scanning ? 'Scanning & Generating...' : 'Generate Post/DM'}
+          </button>
+        </div>
+
+        {translatedOutput && (
+          <div className="mt-12 grid grid-cols-2 gap-8">
+            <div className="bg-gray-900/50 p-8 rounded-lg">
+              <h3 className="text-2xl font-bold mb-4">Original Message (Your Intent)</h3>
+              <p className="text-lg whitespace-pre-wrap">{messageText}</p>
+            </div>
+            <div className="bg-green-900/50 p-8 rounded-lg">
+              <h3 className="text-2xl font-bold mb-4">Adapted for @{recipientHandle} ({detectedFlavor} Flavor)</h3>
+              <p className="text-lg whitespace-pre-wrap">{translatedOutput}</p>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Modals */}
       {showReplyModal && selectedCluster && (
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
           <div className="bg-blue-950/90 rounded-2xl p-8 max-w-4xl w-full mx-4">
@@ -191,15 +246,12 @@ export default function EIPICICore() {
             </div>
             <div className="flex justify-end gap-4 mt-8">
               <button onClick={() => setShowReplyModal(false)} className="px-8 py-4 bg-gray-700 rounded-full text-xl">Cancel</button>
-              <button onClick={() => copyToClipboard(generateReply(selectedCluster.flavor))} className="px-8 py-4 bg-green-500 rounded-full text-xl font-bold">
-                Copy Reply to Clipboard
-              </button>
+              <button className="px-8 py-4 bg-green-500 rounded-full text-xl font-bold">Copy Reply</button>
             </div>
           </div>
         </div>
       )}
 
-      {/* Invite Modal */}
       {showInviteModal && selectedUnifier && (
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
           <div className="bg-blue-950/90 rounded-2xl p-8 max-w-4xl w-full mx-4">
@@ -216,9 +268,7 @@ export default function EIPICICore() {
             </div>
             <div className="flex justify-end gap-4 mt-8">
               <button onClick={() => setShowInviteModal(false)} className="px-8 py-4 bg-gray-700 rounded-full text-xl">Cancel</button>
-              <button onClick={() => copyToClipboard(craftInviteMessage(selectedUnifier))} className="px-8 py-4 bg-green-500 rounded-full text-xl font-bold">
-                Copy Invite to Clipboard & Mark Sent ✓
-              </button>
+              <button className="px-8 py-4 bg-green-500 rounded-full text-xl font-bold">Copy Invite & Mark Sent ✓</button>
             </div>
           </div>
         </div>
