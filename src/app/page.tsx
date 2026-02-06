@@ -10,7 +10,7 @@ export default function EIPICICore() {
   const [showInviteModal, setShowInviteModal] = useState(false);
   const [selectedUnifier, setSelectedUnifier] = useState<string | null>(null);
 
-  // Translator states (secondary)
+  // Translator states
   const [writerHandle, setWriterHandle] = useState('');
   const [recipientHandle, setRecipientHandle] = useState('');
   const [messageText, setMessageText] = useState('');
@@ -89,7 +89,9 @@ export default function EIPICICore() {
   ];
 
   const handleSimulate = () => {
-    if (threadUrl.trim()) setSimActive(true);
+    if (threadUrl.trim()) {
+      setSimActive(true);
+    }
   };
 
   return (
@@ -184,9 +186,9 @@ export default function EIPICICore() {
         )}
       </div>
 
-      {/* Dynamic Translator below */}
+      {/* Dynamic Translator Section Below */}
       <div className="max-w-5xl mx-auto mt-32 bg-blue-900/50 p-12 rounded-2xl">
-        <h2 className="text-3xl font-bold text-center mb-8">Dynamic Translator (Active Handle Scan)</h2>
+        <h2 className="text-3xl font-bold text-center mb-8">EIPICI Dynamic Translator</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
           <input
             type="text"
@@ -197,7 +199,7 @@ export default function EIPICICore() {
           />
           <input
             type="text"
-            placeholder="Recipient @handle (real scan for flavor)"
+            placeholder="Recipient @handle (scan for flavor)"
             value={recipientHandle}
             onChange={(e) => setRecipientHandle(e.target.value)}
             className="p-4 rounded-lg bg-blue-900/30 text-lg"
@@ -211,7 +213,7 @@ export default function EIPICICore() {
         />
         <div className="text-center">
           <button onClick={generateTranslation} disabled={scanning} className="px-8 py-4 bg-green-600 rounded-lg text-xl font-bold">
-            {scanning ? 'Scanning Posts & Generating...' : 'Generate Post/DM'}
+            {scanning ? 'Scanning & Generating...' : 'Generate Post/DM'}
           </button>
         </div>
 
@@ -229,7 +231,8 @@ export default function EIPICICore() {
         )}
       </div>
 
-      {/* Reply & Invite Modals */}
+      {/* Modals */}
+      {/* Reply Modal */}
       {showReplyModal && selectedCluster && (
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
           <div className="bg-blue-950/90 rounded-2xl p-8 max-w-4xl w-full mx-4">
@@ -252,6 +255,7 @@ export default function EIPICICore() {
         </div>
       )}
 
+      {/* Invite Modal */}
       {showInviteModal && selectedUnifier && (
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
           <div className="bg-blue-950/90 rounded-2xl p-8 max-w-4xl w-full mx-4">
