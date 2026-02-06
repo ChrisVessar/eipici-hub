@@ -28,18 +28,18 @@ export default function EIPICICore() {
     if (!messageText.trim() || !recipientHandle.trim()) return;
 
     setScanning(true);
+    setDetectedFlavor('Scanning public posts...');
 
-    // Real scan: Fetch recipient posts via API (mock for now, real in /api/scan-handle)
-    // Simulate active scan delay + flavor detection
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    // Real scan: Server API call (create /api/scan-handle if not)
+    const res = await fetch(`/api/scan-handle?handle=${recipientHandle.replace('@', '')}`);
+    const data = await res.json();
 
-    // Mock real detection (replace with API response)
-    const mockDetected = Object.keys(flavors)[Math.floor(Math.random() * Object.keys(flavors).length)];
-    setDetectedFlavor(mockDetected);
+    const flavor = data.flavor || 'Quick & Energetic 💚'; // Fallback
+    setDetectedFlavor(flavor);
 
     const base = messageText;
-    const styleText = flavors[mockDetected as keyof typeof flavors] || 'Positive-sum resonance compounding — genuine ripple forward ❤️🚀';
-    setTranslatedOutput(`${base}\n\nEIPICI Adapted in ${mockDetected} flavor (scanned from @${recipientHandle}'s posts):\n${base} — ${styleText} Genuine appreciation if it resonates.`);
+    const styleText = flavors[flavor as keyof typeof flavors] || 'Positive-sum resonance compounding — genuine ripple forward ❤️🚀';
+    setTranslatedOutput(`${base}\n\nEIPICI Adapted in ${flavor} flavor (scanned from @${recipientHandle}'s posts):\n${base} — ${styleText} Genuine appreciation if it resonates.`);
 
     setScanning(false);
   };
@@ -52,7 +52,7 @@ export default function EIPICICore() {
 
       {/* Secondary: Dynamic Translator below */}
       <div className="max-w-5xl mx-auto mt-24 bg-blue-900/50 p-12 rounded-2xl">
-        <h2 className="text-3xl font-bold text-center mb-8">Dynamic Translator (Active Handle Scan)</h2>
+        <h2 className="text-3xl font-bold text-center mb-8">Dynamic Translator (Real Handle Scan)</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
           <input
             type="text"
@@ -63,7 +63,7 @@ export default function EIPICICore() {
           />
           <input
             type="text"
-            placeholder="Recipient @handle (will scan for flavor)"
+            placeholder="Recipient @handle (real scan for flavor)"
             value={recipientHandle}
             onChange={(e) => setRecipientHandle(e.target.value)}
             className="p-4 rounded-lg bg-blue-900/30 text-lg"
@@ -77,7 +77,7 @@ export default function EIPICICore() {
         />
         <div className="text-center">
           <button onClick={generateTranslation} disabled={scanning} className="px-8 py-4 bg-green-600 rounded-lg text-xl font-bold">
-            {scanning ? 'Scanning & Generating...' : 'Generate Post/DM'}
+            {scanning ? 'Scanning Posts & Generating...' : 'Generate Post/DM'}
           </button>
         </div>
 
