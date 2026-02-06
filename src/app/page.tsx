@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 export default function EIPICICore() {
   const [threadUrl, setThreadUrl] = useState('');
-  const [simActive, setSimActive] = useState(false);
+  const [simActive, setSimActive] = useState(true); // Default true for demo - shows dashboard immediately
   const [showReplyModal, setShowReplyModal] = useState(false);
   const [selectedCluster, setSelectedCluster] = useState<any>(null);
   const [showInviteModal, setShowInviteModal] = useState(false);
@@ -184,7 +184,7 @@ export default function EIPICICore() {
         )}
       </div>
 
-      {/* Dynamic Translator */}
+      {/* Dynamic Translator below */}
       <div className="max-w-5xl mx-auto mt-32 bg-blue-900/50 p-12 rounded-2xl">
         <h2 className="text-3xl font-bold text-center mb-8">EIPICI Dynamic Translator</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
