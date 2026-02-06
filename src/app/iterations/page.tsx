@@ -26,23 +26,38 @@ export default function EIPICIIterationsTest() {
     setScanning(true);
     setDetectedFlavor('Scanning public posts...');
 
+    // Simulate scan delay
     await new Promise(resolve => setTimeout(resolve, 1500));
+
+    // Mock detected flavor (replace with real scan API later)
     const mockDetected = Object.keys(styles)[Math.floor(Math.random() * Object.keys(styles).length)];
     setDetectedFlavor(mockDetected);
 
-    const base = messageText;
     const styleText = styles[mockDetected as keyof typeof styles] || 'Positive-sum resonance compounding — genuine ripple forward ❤️🚀';
-    setTranslatedOutput(`${base}\n\nEIPICI Adapted in ${mockDetected} flavor (scanned from @${recipientHandle}'s posts):\n${base} — ${styleText} Genuine appreciation if it resonates.`);
+
+    setTranslatedOutput(`EIPICI Translated for @${recipientHandle} (${mockDetected} Flavor):\n\n${messageText} — ${styleText} Genuine appreciation if it resonates.`);
 
     setScanning(false);
   };
 
+  const copyToClipboard = () => {
+    if (translatedOutput) {
+      navigator.clipboard.writeText(translatedOutput);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-black to-blue-950 text-white p-8">
-      <h1 className="text-5xl font-bold text-center mb-12">EIPICI Iterations Test Page</h1>
+      <h1 className="text-5xl font-bold text-center mb-8">EIPICI Dynamic Translator (Test Page)</h1>
+
+      {/* Prominent explanatory message */}
+      <div className="max-w-5xl mx-auto text-center mb-16">
+        <p className="text-3xl font-semibold text-cyan-300 leading-relaxed">
+          This translator maintains harmony and intent authenticity while adapting the message to the style of the recipient — in the most likely way they want to hear it, without losing any of the original intent!
+        </p>
+      </div>
 
       <div className="max-w-5xl mx-auto bg-blue-900/50 p-12 rounded-2xl">
-        <h2 className="text-3xl font-bold text-center mb-8">Dynamic Translator Test (Active Handle Scan)</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
           <input
             type="text"
@@ -72,14 +87,13 @@ export default function EIPICIIterationsTest() {
         </div>
 
         {translatedOutput && (
-          <div className="mt-12 grid grid-cols-2 gap-8">
-            <div className="bg-gray-900/50 p-8 rounded-lg">
-              <h3 className="text-2xl font-bold mb-4">Original Message (Your Intent)</h3>
-              <p className="text-lg whitespace-pre-wrap">{messageText}</p>
-            </div>
-            <div className="bg-green-900/50 p-8 rounded-lg">
-              <h3 className="text-2xl font-bold mb-4">Adapted for @{recipientHandle} ({detectedFlavor} Flavor)</h3>
-              <p className="text-lg whitespace-pre-wrap">{translatedOutput}</p>
+          <div className="mt-12 bg-green-900/50 p-8 rounded-lg">
+            <h3 className="text-2xl font-bold mb-4 text-center">Translated Message (Ready to Copy)</h3>
+            <p className="text-lg whitespace-pre-wrap mb-8">{translatedOutput}</p>
+            <div className="text-center">
+              <button onClick={copyToClipboard} className="px-8 py-4 bg-cyan-600 rounded-lg text-xl font-bold">
+                Copy to Clipboard
+              </button>
             </div>
           </div>
         )}
