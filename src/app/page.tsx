@@ -1,8 +1,11 @@
+// Full main landing page: app/page.tsx
+// Paste this entire block → select all → delete → paste → save
+
 'use client';
 
 import { useState } from 'react';
 
-export default function EIPICICore() {
+export default function EIPICILanding() {
   const [threadUrl, setThreadUrl] = useState('');
   const [simActive, setSimActive] = useState(false);
   const [showReplyModal, setShowReplyModal] = useState(false);
@@ -94,9 +97,9 @@ export default function EIPICICore() {
           <p className="text-2xl font-semibold text-cyan-300">Harmony and intent? Authenticity is truly exponentially epic.</p>
         </div>
 
-        {/* Button to Translator */}
-        <div className="text-center mb-12">
-          <a href="/translator" className="px-8 py-4 bg-green-600 rounded-lg text-xl font-bold">
+        {/* Button to Translator - right-aligned for prominence (real-world UX: secondary actions right of primary) */}
+        <div className="text-right mb-12">
+          <a href="/translator" className="px-8 py-4 bg-green-600 rounded-lg text-xl font-bold inline-block">
             Open EIPICI Dynamic Translator
           </a>
         </div>
